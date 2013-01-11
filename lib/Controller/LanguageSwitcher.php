@@ -7,6 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 namespace x_ls;
+require_once __DIR__.'/../functions.php';
 
 class Controller_LanguageSwitcher extends \Controller {
     public $file_extension = 'yml';
@@ -14,8 +15,10 @@ class Controller_LanguageSwitcher extends \Controller {
     public $default_language = false;
     public $translation_dir_path=false;
     public $switcher_tag = 'x_ls_panel';
+
     function init() {
         parent::init();
+        $_SESSION['x_ls'] = $this;
         $this->check();
         $this->api->x_ls = $this;
 
