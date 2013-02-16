@@ -10,13 +10,29 @@
 /*
 
 
-//                $before = memory_get_usage();
+  !!! NO MORE SESSION  !!!
 
-                    create object here
+Usage:
+add to you Frontend
 
-//                $after = memory_get_usage();
-//                var_dump(($after - $before)/(1024*1024));
 
+    // translations
+    public $x_ls = false;
+    function __($string) {
+        if (!$this->x_ls) {
+            $this->add('x_ls/Controller_LanguageSwitcher',array(
+                'languages'=>array('en','ru','lv','ua'),
+                'default_language'=>'en',
+            ));
+            //$this->x_ls->setModel('Translations');
+        }
+        return $this->x_ls->__($string);
+    }
+
+
+and translate strings by
+
+$this->api->__('ane text to translate')
 
 
  */
@@ -24,7 +40,6 @@
 
 
 namespace x_ls;
-require_once __DIR__.'/../functions.php';
 require_once __DIR__."/../../spyc/spyc.php";
 
 class Controller_LanguageSwitcher extends \Controller {
@@ -36,7 +51,6 @@ class Controller_LanguageSwitcher extends \Controller {
 
     function init() {
         parent::init();
-        $_SESSION['x_ls'] = $this;
         $this->api->x_ls = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
 
@@ -133,3 +147,14 @@ class Controller_LanguageSwitcher extends \Controller {
         parent::defaultTemplate();
     }
 }
+
+
+
+/*
+//                $before = memory_get_usage();
+
+                    create object here
+
+//                $after = memory_get_usage();
+//                var_dump(($after - $before)/(1024*1024));
+ */
