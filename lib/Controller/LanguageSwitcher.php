@@ -36,9 +36,6 @@ $this->api->__('ane text to translate')
 
 
  */
-
-
-
 namespace x_ls;
 require_once __DIR__."/../../spyc/spyc.php";
 
@@ -72,7 +69,7 @@ class Controller_LanguageSwitcher extends \Controller {
                 return $this->translations[$string];
             }
         }
-        return '-'.$string.'-';
+        return '☺'.$string;
     }
     private function translate() {
         if($this->model) {
@@ -114,7 +111,12 @@ class Controller_LanguageSwitcher extends \Controller {
     private function switchLanguageIfRequired() {
         if ($_GET['user_panel_lang']) {
             $this->memorizeLang($_GET['user_panel_lang']);
-            $this->api->redirect();
+            $e = str_replace('user_panel_lang='.$_GET['user_panel_lang'],'',$_SERVER["REQUEST_URI"]);
+            $e = str_replace('&&','',$e);
+            $e = str_replace('??','',$e);
+            $e = preg_replace('/\&$/','',$e);
+            $e = preg_replace('/\?$/','',$e);
+            header("Location: ".$e);
         }
     }
     private function addLangSwitcher() {
