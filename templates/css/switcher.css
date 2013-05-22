@@ -1,0 +1,3 @@
+.language_switcher {float:right;}
+ul.language_switcher li {list-style: none;float:left;margin-left:7px;}
+ul.language_switcher li.default a {color:black;}

@@ -48,6 +48,17 @@ class Controller_LanguageSwitcher extends \Controller {
 
     function init() {
         parent::init();
+        
+        // add locations
+        $l=$this->api->locate('addons',__NAMESPACE__,'location');
+        $addon = $this->api->locate('addons',__NAMESPACE__);
+        $this->api->pathfinder->addLocation($addon,array(
+            'php'=>'lib',
+            'template'=>'templates',
+            'css'=>'templates/css',
+        ))->setParent($l);
+        $this->api->jui->addStaticStylesheet('switcher');
+
         $this->api->x_ls = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
 
@@ -120,6 +131,12 @@ class Controller_LanguageSwitcher extends \Controller {
         }
     }
     private function addLangSwitcher() {
+        $v = $this->api->add('View_LanguageSwitcher',
+                array(
+                    'languages'=>$this->languages,
+                    'default_language'=>$this->getLanguage()),
+                'lang_switcher');
+        /*
         $v = $this->api->add('View',null,'lang_switcher');
         foreach ($this->languages as $lang) {
             $lv = $v->add('View')->addStyle('float','right');
@@ -129,13 +146,9 @@ class Controller_LanguageSwitcher extends \Controller {
                 $lv->setHTML('&nbsp;<a href="'.$this->getRedirUrl().$lang.'">'.$lang.'</a>&nbsp;');
             }
         }
+         * 
+         */
     }
-    private function getRedirUrl() {
-        $url = $_SERVER["REQUEST_URI"];
-        $url .= ((substr_count($url,'?')?'&user_panel_lang=':'?user_panel_lang='));
-        return $url;
-    }
-
     ///////////     addon config      //////////////
     function defaultTemplate() {
 		// add add-on locations to pathfinder
