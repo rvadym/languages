@@ -1,6 +1,7 @@
 <?php
-//namespace x_ls;
+namespace x_ls;
 class View_LanguageSwitcher extends \View {
+    public $controller;
     function init() {
         parent::init();
         
@@ -18,9 +19,7 @@ class View_LanguageSwitcher extends \View {
         $lister->setSource($source);
     }
     private function getRedirUrl() {
-        $url = $_SERVER["REQUEST_URI"];
-        $url .= ((substr_count($url,'?')?'&user_panel_lang=':'?user_panel_lang='));
-        return $url;
+        return $this->controller->getRedirUrl();
     }
     
     function defaultTemplate() {

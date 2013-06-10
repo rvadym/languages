@@ -9,16 +9,13 @@
 
 /*
 
-
-  !!! NO MORE SESSION  !!!
-
 Usage:
 add to you Frontend
 
 
     // translations
     public $x_ls = false;
-    function __($string) {
+    function _($string) {
         if (!$this->x_ls) {
             $this->add('x_ls/Controller_LanguageSwitcher',array(
                 'languages'=>array('en','ru','lv','ua'),
@@ -32,7 +29,7 @@ add to you Frontend
 
 and translate strings by
 
-$this->api->__('ane text to translate')
+$this->api->_('ane text to translate')
 
 
  */
@@ -40,24 +37,27 @@ namespace x_ls;
 require_once __DIR__."/../../spyc/spyc.php";
 
 class Controller_LanguageSwitcher extends \Controller {
-    public $file_extension = 'yml';
-    public $languages = array();
-    public $default_language = false;
-    public $translation_dir_path=false;
-    public $switcher_tag = 'x_ls_panel';
+    public $file_extension         = 'yml';
+    public $languages              = array();
+    public $default_language       = false;
+    public $translation_dir_path   = false;
+    public $switcher_tag           = 'x_ls_panel';
+    public $view_class             = 'x_ls/View_LanguageSwitcher';
 
     function init() {
         parent::init();
-        
-        // add locations
-        $l=$this->api->locate('addons',__NAMESPACE__,'location');
-        $addon = $this->api->locate('addons',__NAMESPACE__);
-        $this->api->pathfinder->addLocation($addon,array(
+
+
+		// add add-on locations to pathfinder
+		$this->l = $this->api->locate('addons',__NAMESPACE__,'location');
+		$addon_location = $this->api->locate('addons',__NAMESPACE__);
+		$this->api->pathfinder->addLocation($addon_location,array(
             'php'=>'lib',
             'template'=>'templates',
             'css'=>'templates/css',
-        ))->setParent($l);
+		))->setParent($this->l);
         $this->api->jui->addStaticStylesheet('switcher');
+
 
         $this->api->x_ls = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
@@ -80,7 +80,7 @@ class Controller_LanguageSwitcher extends \Controller {
                 return $this->translations[$string];
             }
         }
-        return '☺'.$string;
+        return (($this->api->getConfig('x_ls/debug',false))?'☺':'').$string;
     }
     private function translate() {
         if($this->model) {
@@ -130,36 +130,19 @@ class Controller_LanguageSwitcher extends \Controller {
             header("Location: ".$e);
         }
     }
+    function getRedirUrl() {
+        $url = $_SERVER["REQUEST_URI"];
+        $url .= ((substr_count($url,'?')?'&user_panel_lang=':'?user_panel_lang='));
+        return $url;
+    }
     private function addLangSwitcher() {
-        $v = $this->api->add('View_LanguageSwitcher',
+        $v = $this->api->add($this->view_class,
                 array(
                     'languages'=>$this->languages,
-                    'default_language'=>$this->getLanguage()),
-                'lang_switcher');
-        /*
-        $v = $this->api->add('View',null,'lang_switcher');
-        foreach ($this->languages as $lang) {
-            $lv = $v->add('View')->addStyle('float','right');
-            if ($lang == $this->getLanguage()) {
-                $lv->setHTML('&nbsp;'.$lang.'&nbsp;');
-            } else {
-                $lv->setHTML('&nbsp;<a href="'.$this->getRedirUrl().$lang.'">'.$lang.'</a>&nbsp;');
-            }
-        }
-         * 
-         */
-    }
-    ///////////     addon config      //////////////
-    function defaultTemplate() {
-		// add add-on locations to pathfinder
-		$this->l = $this->api->locate('addons',__NAMESPACE__,'location');
-		$addon_location = $this->api->locate('addons',__NAMESPACE__);
-		$this->api->pathfinder->addLocation($addon_location,array(
-			//'js'=>'templates/js',
-			//'css'=>'templates/css',
-            //'template'=>'templates',
-		))->setParent($this->l);
-        parent::defaultTemplate();
+                    'default_language'=>$this->getLanguage(),
+                    'controller'=>$this,
+                ),
+            'lang_switcher');
     }
 }
 
