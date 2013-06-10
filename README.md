@@ -34,4 +34,4 @@ If you want all system messages of Agile toolkit to be translated just add this 
         return $this->x_ls->__($string);
     }
 
-You can also change look of switcher. Extend your own switcher View from x_ls\Controller_LanguageSwitcher
+You can also change look of switcher. Extend your own switcher View from x_ls\View_LanguageSwitcher
