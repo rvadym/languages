@@ -43,21 +43,20 @@ class Controller_LanguageSwitcher extends \Controller {
     public $translation_dir_path   = false;
     public $switcher_tag           = 'x_ls_panel';
     public $view_class             = 'x_ls/View_LanguageSwitcher';
+    public $var_name               = 'user_panel_lang';
+    public $to_same_page           = true;
 
     function init() {
         parent::init();
 
-
 		// add add-on locations to pathfinder
-		$this->l = $this->api->locate('addons',__NAMESPACE__,'location');
+		$this->loc = $this->api->locate('addons',__NAMESPACE__,'location');
 		$addon_location = $this->api->locate('addons',__NAMESPACE__);
 		$this->api->pathfinder->addLocation($addon_location,array(
             'php'=>'lib',
             'template'=>'templates',
             'css'=>'templates/css',
-		))->setParent($this->l);
-        $this->api->jui->addStaticStylesheet('switcher');
-
+		))->setParent($this->loc);
 
         $this->api->x_ls = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
@@ -70,17 +69,15 @@ class Controller_LanguageSwitcher extends \Controller {
     ////////  translation  ////////
     private $translations = array();
     function __($string){
-        if (count($this->translations)==0) $this->translate();
-        if ($this->model) {
-            if (array_key_exists($string,$this->translations)) {
-                return $this->translations[$string];
-            }
-        } else {
-            if (array_key_exists($string,$this->translations)) {
-                return $this->translations[$string];
-            }
+        if (count($this->translations)==0) {
+            $this->translate();
         }
-        return (($this->api->getConfig('x_ls/debug',false))?'☺':'').$string;
+
+        if (array_key_exists($string,$this->translations)) {
+            return $this->translations[$string];
+        } else {
+            return (($this->api->getConfig('x_ls/debug',false))?'☺':'').$string;
+        }
     }
     private function translate() {
         if($this->model) {
@@ -103,46 +100,49 @@ class Controller_LanguageSwitcher extends \Controller {
     private $l = false;
     function getLanguage(){
         if (count($this->languages)==0) throw $this->exception('Provide language set.');
-        if ($this->l) return $this->l;
-        if ($this->recallLang()) return $this->l = $this->recallLang();
-        if ($this->default_language) {
-            $this->memorizeLang($this->default_language);
-            return $this->l = $this->default_language;
+        if ($this->l) {
+            // do nothing
+        } else if ($this->recallLang()) {
+            $this->l = $this->recall($this->var_name);
+        } else if ($this->default_language) {
+            $this->l = $this->default_language;
+            $this->memorizeLang($this->l);
         } else {
-            $this->memorizeLang($this->languages[0]);
-            return $this->l = $this->languages[0];
+            $this->l = $this->languages[0];
+            $this->memorizeLang($this->l);
         }
+        return $this->l;
     }
     private function memorizeLang($lang) {
-        $this->memorize('user_panel_lang',$lang);
+        $this->memorize($this->var_name,$lang);
     }
     private function recallLang() {
-        return $this->recall('user_panel_lang');
+        return $this->recall($this->var_name);
     }
     private function switchLanguageIfRequired() {
-        if ($_GET['user_panel_lang']) {
-            $this->memorizeLang($_GET['user_panel_lang']);
-            $e = str_replace('user_panel_lang='.$_GET['user_panel_lang'],'',$_SERVER["REQUEST_URI"]);
-            $e = str_replace('&&','',$e);
-            $e = str_replace('??','',$e);
-            $e = preg_replace('/\&$/','',$e);
-            $e = preg_replace('/\?$/','',$e);
-            header("Location: ".$e);
+        if ($_GET[$this->var_name]) {
+            $this->memorizeLang($_GET[$this->var_name]);
+            if ($this->to_same_page) {
+                $e = str_replace($this->var_name.'='.$_GET[$this->var_name],'',$_SERVER["REQUEST_URI"]);
+                $e = str_replace('&&','',$e);
+                $e = str_replace('??','',$e);
+                $e = preg_replace('/\&$/','',$e);
+                $e = preg_replace('/\?$/','',$e);
+            } else {
+                $e = $this->api->pm->base_path;
+            }
+            header("Location: ".$e); exit();
         }
     }
     function getRedirUrl() {
         $url = $_SERVER["REQUEST_URI"];
-        $url .= ((substr_count($url,'?')?'&user_panel_lang=':'?user_panel_lang='));
+        $url .= ((substr_count($url,'?')?'&'.$this->var_name.'=':'?'.$this->var_name.'='));
         return $url;
     }
     private function addLangSwitcher() {
-        $v = $this->api->add($this->view_class,
-                array(
-                    'languages'=>$this->languages,
-                    'default_language'=>$this->getLanguage(),
-                    'controller'=>$this,
-                ),
-            'lang_switcher');
+        $this->api->add($this->view_class,
+            array('controller'=>$this),
+        'lang_switcher');
     }
 }
 
