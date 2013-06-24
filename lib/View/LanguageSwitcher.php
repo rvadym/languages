@@ -12,7 +12,7 @@ class View_LanguageSwitcher extends \View {
         $source=array();
         foreach ($this->controller->languages as $lang) {
             $s=array(
-                'href'=>$this->controller->getRedirUrl().$lang,
+                'href'=>$this->controller->getChangeLangUrl($lang),
                 'name'=>$lang,
             );
             $s['class']=($lang==$this->controller->getLanguage())?'current':'';
