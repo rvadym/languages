@@ -37,7 +37,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
 
     ////////  translation  ////////
     protected $translations = array();
-    function __($string){
+    public function __($string){
         if (count($this->translations)==0) {
             $this->translate();
         }
@@ -74,7 +74,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public function addLangSwitcher() {
         $this->api->add($this->view_class,
             array('controller'=>$this),
-        'lang_switcher');
+        $this->switcher_tag);
     }
 
 }

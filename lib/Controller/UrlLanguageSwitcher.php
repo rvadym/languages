@@ -37,99 +37,83 @@ namespace x_ls;
 
 class Controller_UrlLanguageSwitcher extends Controller_AbstractLanguageSwitcher {
 
+    public $get_var_name = 'lang';
+
     function init() {
         parent::init();
-        $this->switchLanguageIfRequired();
+        $this->api->addHook('buildURL',$this);
         $this->getLanguage();
         $this->addLangSwitcher();
     }
 
-    // do not use directly, use $this->getLanguage() instead.
     private $l = false;
     function getLanguage(){
         if (count($this->languages)==0) throw $this->exception('Provide language set.');
         if ($this->l) {
             return $this->l; // This is not first call of this method. So just return previous result.
         }
-        if ($this->language_in_url) {
-            $url = $_SERVER["REQUEST_URI"];
-            $url_with_no_base_path = preg_replace('/^'. str_replace( '/','\/', $this->api->pm->base_path ) .'/','/',$url);
-            echo '$url_with_no_base_path : '; var_dump($url_with_no_base_path); echo '<hr>';
-
-            if ($url_with_no_base_path == '/') {
-                $http = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')? 'https://':'http://';
-                $port = ($_SERVER['SERVER_PORT'] == 80)? '' : ':'.$_SERVER['SERVER_PORT'];
-                $path = $this->getChangeLangUrl($this->getDefaultLanguage());
-                $link = $http . $_SERVER['SERVER_NAME'] . $port . $path;
-                var_dump($path);
-//                // TODO change url to url with language
-                header("HTTP/1.1 301 Moved Permanently");
-                header("Location: ". $link );
-                exit();
-            }
-
-            return 'RU';
-
-        } else {
-            if ($this->recallLang()) {
-                $this->l = $this->recallLang();
-                return $this->l;
-            } else {
-                $this->l = $this->getDefaultLanguage();
-                $this->memorizeLang($this->l);
-                return $this->l;
-            }
-        }
+        $this->l = $this->getLanguageFromUrl();
+        return $this->l;
     }
-    private function switchLanguageIfRequired() {
-        if ($this->language_in_url) {
-            return false;
+    private function  getLanguageFromUrl() {
+
+        // no mode_rewrite
+        if ($_GET[$this->get_var_name]) {
+            $this->api->stickyGet($this->get_var_name);
+            return $_GET[$this->get_var_name];
         }
-        if ($_GET[$this->var_name]) {
-            $this->memorizeLang($_GET[$this->var_name]);
-            if ($this->to_same_page) {
-                $e = str_replace($this->var_name.'='.$_GET[$this->var_name],'',$_SERVER["REQUEST_URI"]);
-                $e = str_replace('&&','',$e);
-                $e = str_replace('??','',$e);
-                $e = preg_replace('/\&$/','',$e);
-                $e = preg_replace('/\?$/','',$e);
-            } else {
-                $e = $this->api->pm->base_path;
+
+        $page = $this->api->page;
+        $url_arr = explode('_', $page);
+        foreach ($this->languages as $l) {
+            if ($url_arr[0] == $l) {
+                unset($url_arr[0]);
+                $page = implode('_',$url_arr);
+                $this->api->page = ($page=='')?'index':$page;
+                return $l;
             }
-            header("Location: ".$e); exit();
+        }
+        if (!$this->l) {
+            $path = $this->getChangeLangUrl($this->getDefaultLanguage());
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: ". $path );
+            exit();
         }
     }
     function getChangeLangUrl($lang) {
-        $url = $_SERVER["REQUEST_URI"];
-        if ($this->language_in_url) {
-            $url_with_no_base_path = preg_replace('/^'. str_replace( '/','\/', $this->api->pm->base_path ) .'/','/',$url);
 
-            $found = false;
-            foreach ($this->languages as $l) {
-                $current_lang_position = strpos($url_with_no_base_path,'/'.$l.'/');
-                if ($current_lang_position === 0) {
-                    $found = $l;
-                }
-            }
-
-            if ($found) {
-                $url = $this->api->pm->base_path . preg_replace('/^\/'.$found.'/', $lang, $url_with_no_base_path);
-                $this->api->page = str_replace('//','/',
-                    preg_replace('/^\/'.$found.'\//', '', $url_with_no_base_path)
-                );
-            } else {
-                $url = str_replace('//','/','/'.$this->api->pm->base_path.$lang.$url_with_no_base_path);
-            }
-        } else {
-            $url .= ((substr_count($url,'?')?'&'.$this->var_name.'='.$lang:'?'.$this->var_name.'='.$lang));
+        // just to keep all parameters from original URL
+        $get = array();
+        foreach ($_GET as $key=>$value) {
+            $get[$key] = $value;
         }
+
+        // no mode_rewrite
+        if ($_GET[$this->get_var_name]) {
+            $this->api->stickyForget($this->get_var_name);
+            $url = $this->api->url(null,
+                array_merge($get,array($this->get_var_name=>$lang))
+            );
+            $this->api->stickyGet($this->get_var_name);
+            return $url;
+        }
+
+        $args_merged = array_merge($get, array('lang'=>$lang,));
+        $url = $this->api->url(null,$args_merged);
+
         return $url;
     }
-
-    /**
-     * Create URL with language
-     */
-    public function url(/* some params */) {
-
+    function buildURL($junk,$url){
+        if ($url->page == 'index') {
+            $page = '';
+        } else {
+            $page = '/'.$url->page;
+        }
+        if (array_key_exists('lang',$url->arguments)) {
+            $url->page = $url->arguments['lang'].$page;
+            unset($url->arguments['lang']);
+        } else {
+            $url->page = $this->getLanguage().$page;
+        }
     }
 }
