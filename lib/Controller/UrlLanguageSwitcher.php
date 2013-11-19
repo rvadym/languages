@@ -6,34 +6,7 @@
  * Time: 9:28 AM
  * To change this template use File | Settings | File Templates.
  */
-
-/*
-
-Usage:
-add to you Frontend
-
-
-    // translations
-    public $x_ls = false;
-    function _($string) {
-        if (!$this->x_ls) {
-            $this->add('x_ls/Controller_LanguageSwitcher',array(
-                'languages'=>array('en','ru','lv','ua'),
-                'default_language'=>'en',
-            ));
-            //$this->x_ls->setModel('Translations');
-        }
-        return $this->x_ls->__($string);
-    }
-
-
-and translate strings by
-
-$this->api->_('ane text to translate')
-
-
- */
-namespace x_ls;
+namespace rvadym\language_switcher;
 
 class Controller_UrlLanguageSwitcher extends Controller_AbstractLanguageSwitcher {
 

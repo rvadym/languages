@@ -6,17 +6,17 @@
  * Time: 10:44 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace x_ls;
-require_once __DIR__."/../../spyc/spyc.php";
+namespace rvadym\language_switcher;
+//require_once __DIR__."/../../spyc/spyc.php";
 
 abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public $file_extension         = 'yml';
     public $languages              = array();
     public $default_language       = false;
     public $translation_dir_path   = false;
-    public $switcher_tag           = 'x_ls_panel';
-    public $view_class             = 'x_ls/View_LanguageSwitcher';
-    public $var_name               = 'user_panel_lang';
+    public $switcher_tag           = 'language_switcher_panel';
+    public $view_class             = 'language_switcher/View_LanguageSwitcher';
+    public $var_name               = 'language_switcher_lang';
     public $to_same_page           = true;
 
     function init() {
@@ -31,7 +31,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             'css'=>'templates/css',
 		))->setParent($this->loc);
 
-        $this->api->x_ls = $this;
+        $this->api->language_switcher = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
     }
 
@@ -45,7 +45,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         if (array_key_exists($string,$this->translations)) {
             return $this->translations[$string];
         } else {
-            return (($this->api->getConfig('x_ls/debug',false))?'☺':'').$string;
+            return (($this->api->getConfig('rvadym/language_switcher/debug',false))?'☺':'').$string;
         }
     }
     public function translate() {

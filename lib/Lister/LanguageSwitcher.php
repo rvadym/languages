@@ -6,7 +6,7 @@
  * Time: 4:55 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace x_ls;
+namespace rvadym\language_switcher;
 class Lister_LanguageSwitcher extends \CompleteLister {
     function init() {
         parent::init();

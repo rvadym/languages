@@ -32,7 +32,7 @@ If you want all system messages of Agile toolkit to be translated just add this 
     }
 
 You can also change look of switcher.
-Extend your own switcher View from x_ls\View_LanguageSwitcher and change template and method showSwitcher() .
+Extend your own switcher View from rvadym\language_switcher\View_LanguageSwitcher and change template and method showSwitcher() .
 
 To set redirect to homepage after language changing set parameter to_same_page to false.
 
