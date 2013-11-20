@@ -11,6 +11,7 @@
     },
     "autoload": {
         "psr-0": {"rvadym\\language_switcher": "lib/"},
+        "classmap": {"rvadym\\language_switcher": "lib/"},
         "files": ["/spyc/spyc.php"]
     }
 }
