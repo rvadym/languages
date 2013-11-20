@@ -14,7 +14,7 @@
         "files": ["/spyc/spyc.php"]
     },
     "scripts": {
-        "post-package-install": [
+        "post-install-cmd": [
             "rvadym\\language_switcher\\Settings::postPackageInstall"
         ]
     }
