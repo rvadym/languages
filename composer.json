@@ -12,5 +12,10 @@
     "autoload": {
         "psr-0": {"": "lib/"},
         "files": ["/spyc/spyc.php"]
+    },
+    "scripts": {
+        "post-package-install": [
+            "rvadym\\language_switcher\\Settings::postPackageInstall"
+        ]
     }
 }
