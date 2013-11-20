@@ -6,7 +6,7 @@
  * Time: 9:28 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace rvadym\language_switcher;
+namespace rvadym\LanguageSwitcher;
 
 class Controller_UrlLanguageSwitcher extends Controller_AbstractLanguageSwitcher {
 
