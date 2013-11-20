@@ -10,54 +10,7 @@
         "reference": "origin/master"
     },
     "autoload": {
-        "psr-0": {"": "lib/"},
+        "psr-0": {"rvadym/language_switcher": "lib/"},
         "files": ["/spyc/spyc.php"]
-    },
-    "scripts": {
-        "pre-install-cmd": [
-            "pre-install-cmd"
-        ],
-        "post-install-cmd": [
-            "post-install-cmd"
-        ],
-        "pre-update-cmd": [
-            "pre-update-cmd"
-        ],
-        "post-update-cmd": [
-            "post-update-cmd"
-        ],
-        "pre-status-cmd": [
-            "pre-status-cmd"
-        ],
-        "post-status-cmd": [
-            "post-status-cmd"
-        ],
-        "pre-package-install": [
-            "pre-package-install"
-        ],
-        "post-package-install": [
-            "post-package-install"
-        ],
-        "pre-package-update": [
-            "pre-package-update"
-        ],
-        "pre-package-uninstall": [
-            "pre-package-uninstall"
-        ],
-        "post-package-uninstall": [
-            "post-package-uninstall"
-        ],
-        "pre-autoload-dump": [
-            "pre-autoload-dump"
-        ],
-        "post-autoload-dump": [
-            "post-autoload-dump"
-        ],
-        "post-root-package-install": [
-            "post-root-package-install"
-        ],
-        "post-create-project-cmd": [
-            "post-create-project-cmd"
-        ]
     }
 }
