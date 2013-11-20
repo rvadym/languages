@@ -6,7 +6,7 @@
  * Time: 11:17 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace rvadym\LanguageSwitcher;
+namespace rvadym\languages;
 class Controller_PatternRouter extends \Controller_PatternRouter {
 
     function init(){

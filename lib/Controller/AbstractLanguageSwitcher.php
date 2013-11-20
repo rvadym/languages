@@ -6,7 +6,7 @@
  * Time: 10:44 PM
  * To change this template use File | Settings | File Templates.
  */
-namespace rvadym\LanguageSwitcher;
+namespace rvadym\languages;
 //require_once __DIR__."/../../spyc/spyc.php";
 
 abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
@@ -31,7 +31,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             'css'=>'templates/css',
 		))->setParent($this->loc);
 
-        $this->api->LanguageSwitcher = $this;
+        $this->api->languages = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
     }
 
@@ -45,15 +45,15 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         $this->isTranslated($string); // for test env only
 
         if (array_key_exists($string,$this->translations)) {
-            return $string . (($this->api->getConfig('rvadym/LanguageSwitcher/debug',false))?"\xe2\x80\x8b":'');
+            return $string . (($this->api->getConfig('rvadym/languages/debug',false))?"\xe2\x80\x8b":'');
         } else {
-            return (($this->api->getConfig('rvadym/LanguageSwitcher/debug',false))?'☺':'') . $string;
+            return (($this->api->getConfig('rvadym/languages/debug',false))?'☺':'') . $string;
         }
     }
     // works in dev env only
     function isTranslated($string) {
         // check if passed twise throw translation
-        if ($this->getConfig('rvadym/LanguageSwitcher/debug',false)) {
+        if ($this->getConfig('rvadym/languages/debug',false)) {
             if(strpos($string,"\xe2\x80\x8b")!==false){
                 throw new BaseException('String '.$string.' passed through _() twice');
             }

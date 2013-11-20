@@ -6,7 +6,7 @@
  * Time: 9:28 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace rvadym\LanguageSwitcher;
+namespace rvadym\languages;
 
 class Controller_SessionLanguageSwitcher extends Controller_AbstractLanguageSwitcher {
     function init() {

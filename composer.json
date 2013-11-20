@@ -1,16 +1,16 @@
 {
-    "name": "rvadym/LanguageSwitcher",
+    "name": "rvadym/languages",
     "type": "library",
     "version": "4.3",
     "keywords": ["language switcher","atk4"],
-    "homepage": "https://github.com/rvadym/LanguageSwitcher",
+    "homepage": "https://github.com/rvadym/languages",
     "source": {
-        "url": "git@github.com:rvadym/LanguageSwitcher.git",
+        "url": "git@github.com:rvadym/languages.git",
         "type": "git",
         "reference": "origin/master"
     },
     "autoload": {
-        "psr-0": {"rvadym\\LanguageSwitcher": "lib/"},
+        "psr-0": {"rvadym\\languages": "lib/"},
         "files": ["/spyc/spyc.php"]
     }
 }

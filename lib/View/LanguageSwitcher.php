@@ -1,5 +1,5 @@
 <?php
-namespace rvadym\LanguageSwitcher;
+namespace rvadym\languages;
 class View_LanguageSwitcher extends \View {
     function init() {
         parent::init();
@@ -19,7 +19,7 @@ class View_LanguageSwitcher extends \View {
             $source[]=$s;
         }
 
-        $lister = $this->add('rvadym\LanguageSwitcher\Lister_LanguageSwitcher',null,'lister');
+        $lister = $this->add('rvadym\languages\Lister_LanguageSwitcher',null,'lister');
         $lister->setSource($source);
     }
     function defaultTemplate() {

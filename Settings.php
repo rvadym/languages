@@ -6,7 +6,7 @@
  * Time: 10:09 AM
  * To change this template use File | Settings | File Templates.
  */
-namespace rvadym\LanguageSwitcher;
+namespace rvadym\languages;
 class Settings {
     public static function postUpdate(Event $event) {
         $composer = $event->getComposer();
