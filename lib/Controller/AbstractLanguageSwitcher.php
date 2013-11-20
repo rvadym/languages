@@ -42,10 +42,21 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             $this->translate();
         }
 
+        $this->isTranslated($string); // for test env only
+
         if (array_key_exists($string,$this->translations)) {
-            return $this->translations[$string];
+            return $string . (($this->api->getConfig('rvadym/language_switcher/debug',false))?"\xe2\x80\x8b":'');
         } else {
-            return (($this->api->getConfig('rvadym/language_switcher/debug',false))?'☺':'').$string;
+            return (($this->api->getConfig('rvadym/language_switcher/debug',false))?'☺':'') . $string;
+        }
+    }
+    // works in dev env only
+    function isTranslated($string) {
+        // check if passed twise throw translation
+        if ($this->getConfig('rvadym/language_switcher/debug',false)) {
+            if(strpos($string,"\xe2\x80\x8b")!==false){
+                throw new BaseException('String '.$string.' passed through _() twice');
+            }
         }
     }
     public function translate() {
