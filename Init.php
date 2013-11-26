@@ -7,8 +7,13 @@
  * To change this template use File | Settings | File Templates.
  */
 class Init extends \AbstractController {
+    public $addon_obj;
     function init() {
         parent::init();
+        $this->api->addHook('localizeString',array($this,'_()'));
 
+    }
+    function _($str) {
+        exit($str);
     }
 }
