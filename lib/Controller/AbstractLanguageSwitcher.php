@@ -15,7 +15,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public $default_language       = false;
     public $translation_dir_path   = false;
     public $switcher_tag           = 'language_switcher_panel';
-    public $view_class             = 'language_switcher/View_LanguageSwitcher';
+    public $view_class             = 'rvadym/languages/View_LanguageSwitcher';
     public $var_name               = 'language_switcher_lang';
     public $to_same_page           = true;
 
@@ -23,13 +23,13 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         parent::init();
 
 		// add add-on locations to pathfinder
-		$this->loc = $this->api->locate('addons',__NAMESPACE__,'location');
-		$addon_location = $this->api->locate('addons',__NAMESPACE__);
-		$this->api->pathfinder->addLocation($addon_location,array(
-            'php'=>'lib',
-            'template'=>'templates',
-            'css'=>'templates/css',
-		))->setParent($this->loc);
+//		$this->loc = $this->api->locate('addons',__NAMESPACE__,'location');
+//		$addon_location = $this->api->locate('addons',__NAMESPACE__);
+//		$this->api->pathfinder->addLocation($addon_location,array(
+//            'php'=>'lib',
+//            'template'=>'templates',
+//            'css'=>'templates/css',
+//		))->setParent($this->loc);
 
         $this->api->languages = $this;
         if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
@@ -53,7 +53,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     // works in dev env only
     function isTranslated($string) {
         // check if passed twise throw translation
-        if ($this->getConfig('rvadym/languages/debug',false)) {
+        if ($this->api->getConfig('rvadym/languages/debug',false)) {
             if(strpos($string,"\xe2\x80\x8b")!==false){
                 throw new BaseException('String '.$string.' passed through _() twice');
             }
