@@ -23,9 +23,9 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         parent::init();
         $this->api->languages = $this;
         if ($this->translation_dir_path) {
-            $this->translation_dir_path = $this->pathfinder->base_location->getPath().'/'.$this->translation_dir_path;
+            $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/'.$this->translation_dir_path;
         } else {
-            $this->translation_dir_path = $this->pathfinder->base_location->getPath().'/translations';
+            $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/translations';
         }
     }
 
