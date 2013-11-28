@@ -14,25 +14,19 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public $languages              = array();
     public $default_language       = false;
     public $translation_dir_path   = false;
-    public $switcher_tag           = 'language_switcher_panel';
+    public $switcher_tag           = null; // 'language_switcher_panel'
     public $view_class             = 'rvadym/languages/View_LanguageSwitcher';
     public $var_name               = 'language_switcher_lang';
     public $to_same_page           = true;
 
     function init() {
         parent::init();
-
-		// add add-on locations to pathfinder
-//		$this->loc = $this->api->locate('addons',__NAMESPACE__,'location');
-//		$addon_location = $this->api->locate('addons',__NAMESPACE__);
-//		$this->api->pathfinder->addLocation($addon_location,array(
-//            'php'=>'lib',
-//            'template'=>'templates',
-//            'css'=>'templates/css',
-//		))->setParent($this->loc);
-
         $this->api->languages = $this;
-        if (!$this->translation_dir_path) $this->translation_dir_path = $this->api->pm->base_directory.'translations';
+        if ($this->translation_dir_path) {
+            $this->translation_dir_path = $this->pathfinder->base_location->getPath().'/'.$this->translation_dir_path;
+        } else {
+            $this->translation_dir_path = $this->pathfinder->base_location->getPath().'/translations';
+        }
     }
 
     ////////  translation  ////////
