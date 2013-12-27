@@ -23,7 +23,11 @@ class Initiator extends \AbstractController {
         return $this->translations->__($string);
     }
     private function setConfigs() {
-        $configs = $this->api->getConfig($this->addon_obj->name,array());
+        $default_config = array(
+            'switcher_type'=>'session',
+            'languages'=>array('en'),
+        );
+        $configs = $this->api->getConfig($this->addon_obj->name,$default_config);
 
         // TODO check all configs
 
