@@ -25,7 +25,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         if ($this->translation_dir_path) {
             $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/'.$this->translation_dir_path;
         } else {
-            $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/translations';
+            $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/../translations';
         }
     }
 
@@ -61,6 +61,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
                 $this->translations[$t['value']] = $t[$this->l];
             }
         } else {
+            $this->createDirIfNotExist($this->translation_dir_path);
             $files = scandir($this->translation_dir_path);
             foreach ($files as $file) {
                 if ($file != $this->getLanguage().'.'.$this->file_extension) continue;
@@ -80,6 +81,16 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         $this->api->add($this->view_class,
             array('controller'=>$this),
         $this->switcher_tag);
+    }
+    private function createDirIfNotExist($path) {
+        if (file_exists($path)) {
+            if (!is_dir($path)) {
+                throw $this->exception('File '.$path.' exist and is not a dir!');
+            }
+        } else {
+            mkdir($path);
+            chmod($path,0777);
+        }
     }
 
 }
