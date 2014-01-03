@@ -14,9 +14,12 @@ class Initiator extends \AbstractController {
     function init() {
         parent::init();
         $this->setConfigs();
+        $this->addLocations();
         $this->addTranslator();
         $this->api->addHook('localizeString',array($this,'_'));
     }
+    /* implement this function in your class if you need this */
+    protected function addLocations() {}
     function _($trash,$string) {
         // do not translate if only spases
         if (trim($string) == '') return $string;
@@ -45,13 +48,14 @@ class Initiator extends \AbstractController {
                 default:
                     throw $this->exception("Language switcher type can be 'session' or 'url'. Current config type is ". $this->configs['switcher_type'].'.');
             }
-            $this->translations = $this->add('rvadym\\languages\\'.$class,$this->configs);
+            $class_with_namespace = __NAMESPACE__ . DIRECTORY_SEPARATOR . $class;
+            $this->translations = $this->add($class_with_namespace, $this->configs);
             if ($this->configs['store_type'] == 'db') {
                 $this->translations->setModel($this->configs['model']);
             }
         }
     }
-    private function getAddonName() {
+    protected function getAddonName() {
         return $this->addon_obj->get('name');
     }
 }
