@@ -14,7 +14,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public $languages              = array();
     public $default_language       = false;
     public $translation_dir_path   = false;
-    public $switcher_tag           = null; // 'language_switcher_panel'
+    public $switcher_tag           = 'lang_switch'; // 'lang_switch'
     public $view_class             = 'rvadym/languages/View_LanguageSwitcher';
     public $var_name               = 'language_switcher_lang';
     public $to_same_page           = true;
@@ -28,6 +28,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         } else {
             $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/translations';
         }
+        $this->api->getConfig($this->initiator->getAddonName().'/switcher_tag','lang_switch');
     }
 
     ////////  translation  ////////
@@ -38,9 +39,8 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         }
 
         $this->isTranslated($string); // for test env only
-
         if (array_key_exists($string,$this->translations)) {
-            return $string . (($this->api->getConfig($this->initiator->getAddonName().'/debug',false))?"\xe2\x80\x8b":'');
+            return $this->translations[$string] . (($this->api->getConfig($this->initiator->getAddonName().'/debug',false))?"\xe2\x80\x8b":'');
         } else {
             return (($this->api->getConfig($this->initiator->getAddonName().'/debug',false))?'☺':'') . $string;
         }
@@ -79,9 +79,13 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         }
     }
     public function addLangSwitcher() {
-        $this->api->add($this->view_class,
-            array('controller'=>$this),
-        $this->switcher_tag);
+        if ($this->api->layout) {
+            $this->api->layout->add($this->view_class,
+                array('controller'=>$this),
+            $this->switcher_tag);
+        } else {
+            exit('blia');
+        }
     }
     private function createDirIfNotExist($path) {
         if (file_exists($path)) {
