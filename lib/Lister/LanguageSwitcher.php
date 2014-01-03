@@ -11,7 +11,7 @@ class Lister_LanguageSwitcher extends \CompleteLister {
     function init() {
         parent::init();
     }
-    function formatRow() {echo $this->current_row['name']."===<br>\n";
+    function formatRow() {
         if ($this->current_row['class'] == 'current') {
             $this->current_row_html['element'] = '<span>'.$this->current_row['name'].'</span>';
         } else {
