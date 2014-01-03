@@ -10,6 +10,7 @@
         "reference": "origin/master"
     },
     "autoload": {
-        "files": ["/spyc/spyc.php"]
+        "files": ["/spyc/spyc.php"],
+         "psr-0": {"rvadym\\languages": "lib/"}
     }
 }
