@@ -18,6 +18,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public $view_class             = 'rvadym/languages/View_LanguageSwitcher';
     public $var_name               = 'language_switcher_lang';
     public $to_same_page           = true;
+    public $initiator              = null;
 
     function init() {
         parent::init();
@@ -39,15 +40,15 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         $this->isTranslated($string); // for test env only
 
         if (array_key_exists($string,$this->translations)) {
-            return $string . (($this->api->getConfig('rvadym/languages/debug',false))?"\xe2\x80\x8b":'');
+            return $string . (($this->api->getConfig($this->initiator->getAddonName().'/debug',false))?"\xe2\x80\x8b":'');
         } else {
-            return (($this->api->getConfig('rvadym/languages/debug',false))?'☺':'') . $string;
+            return (($this->api->getConfig($this->initiator->getAddonName().'/debug',false))?'☺':'') . $string;
         }
     }
     // works in dev env only
     function isTranslated($string) {
         // check if passed twise throw translation
-        if ($this->api->getConfig('rvadym/languages/debug',false)) {
+        if ($this->api->getConfig($this->initiator->getAddonName().'/debug',false)) {
             if(strpos($string,"\xe2\x80\x8b")!==false){
                 throw new BaseException('String '.$string.' passed through _() twice');
             }

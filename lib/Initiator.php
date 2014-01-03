@@ -31,6 +31,7 @@ class Initiator extends \AbstractController {
             'languages'=>array('en'),
         );
         $configs = $this->api->getConfig($this->getAddonName(),$default_config);
+        $configs['initiator'] = $this;
 
         // TODO check all configs
 
@@ -55,7 +56,7 @@ class Initiator extends \AbstractController {
             }
         }
     }
-    protected function getAddonName() {
+    public function getAddonName() {
         return $this->addon_obj->get('name');
     }
 }

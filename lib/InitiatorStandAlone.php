@@ -48,7 +48,7 @@ class InitiatorStandAlone extends Initiator {
     }
 
     private $dummy_addon_obj_name = 'rvadym_languages';
-    protected function getAddonName() {
+    public function getAddonName() {
         return $this->dummy_addon_obj_name;
     }
 }
