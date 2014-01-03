@@ -27,7 +27,7 @@ class Initiator extends \AbstractController {
             'switcher_type'=>'session',
             'languages'=>array('en'),
         );
-        $configs = $this->api->getConfig($this->addon_obj->name,$default_config);
+        $configs = $this->api->getConfig($this->getAddonName(),$default_config);
 
         // TODO check all configs
 
@@ -50,5 +50,8 @@ class Initiator extends \AbstractController {
                 $this->translations->setModel($this->configs['model']);
             }
         }
+    }
+    private function getAddonName() {
+        return $this->addon_obj->get('name');
     }
 }
