@@ -50,7 +50,9 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         // check if passed twise throw translation
         if ($this->api->getConfig($this->initiator->getAddonName().'/debug',false)) {
             if(strpos($string,"\xe2\x80\x8b")!==false){
-                throw new BaseException('String '.$string.' passed through _() twice');
+                if (!strpos($string,'passed through _() twice')) {
+                    throw $this->exception('String '.$string.' passed through _() twice');
+                }
             }
         }
     }
@@ -78,8 +80,9 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             return $this->languages[0];
         }
     }
-    public function addLangSwitcher($view) {
-        $view->add($this->view_class,
+    public function addLangSwitcher($view,$class=null) {
+        $view_class = ($class)?$class:$this->view_class;
+        $view->add($view_class,
             array('controller'=>$this),
         $this->switcher_tag);
     }
