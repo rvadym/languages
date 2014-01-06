@@ -16,7 +16,6 @@ class Controller_UrlLanguageSwitcher extends Controller_AbstractLanguageSwitcher
         parent::init();
         $this->api->addHook('buildURL',$this);
         $this->getLanguage();
-        $this->addLangSwitcher();
     }
 
     private $l = false;

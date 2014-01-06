@@ -78,14 +78,10 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             return $this->languages[0];
         }
     }
-    public function addLangSwitcher() {
-        if ($this->api->layout) {
-            $this->api->layout->add($this->view_class,
-                array('controller'=>$this),
-            $this->switcher_tag);
-        } else {
-            exit('blia');
-        }
+    public function addLangSwitcher($view) {
+        $view->add($this->view_class,
+            array('controller'=>$this),
+        $this->switcher_tag);
     }
     private function createDirIfNotExist($path) {
         if (file_exists($path)) {

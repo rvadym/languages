@@ -56,6 +56,9 @@ class Initiator extends \AbstractController {
             }
         }
     }
+    public function getTranslator() {
+        return $this->translations;
+    }
     public function getAddonName() {
         return $this->addon_obj->get('name');
     }

@@ -13,7 +13,6 @@ class Controller_SessionLanguageSwitcher extends Controller_AbstractLanguageSwit
         parent::init();
         $this->switchLanguageIfRequired();
         $this->getLanguage();
-        $this->addLangSwitcher();
     }
 
     // do not use directly, use $this->getLanguage() instead.
