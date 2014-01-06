@@ -10,6 +10,7 @@ namespace rvadym\languages;
 class Initiator extends \AbstractController {
     public $configs = array();
     public $addon_obj;
+    public $view_class;
     private $translations = false;
     function init() {
         parent::init();
@@ -32,6 +33,9 @@ class Initiator extends \AbstractController {
         );
         $configs = $this->api->getConfig($this->getAddonName(),$default_config);
         $configs['initiator'] = $this;
+        if($this->view_class){
+            $configs['view_class'] = $this->view_class;
+        }
 
         // TODO check all configs
 
