@@ -7,7 +7,23 @@
  * To change this template use File | Settings | File Templates.
  */
 namespace rvadym\languages;
-class Initiator extends \AbstractController {
+class Initiator extends \Controller_Addon {
+
+    public $namespace      = 'rvadym\languages';
+    public $api_var        = 'rvadym_languages';
+    public $addon_name     = 'Agile Toolkit Language Addon';
+    public $addon_private_locations = array(
+        'docs'      => 'docs',
+        'php'       => 'lib',
+        'page'      => 'page',
+        'template'  => 'templates',
+    );
+    public $addon_public_locations  = array(
+        'js'     => 'js',
+        'css'    => 'css',
+    );
+
+
     public $configs = array();
     public $addon_obj;
     public $view_class;
