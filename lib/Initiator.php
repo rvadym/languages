@@ -22,21 +22,18 @@ class Initiator extends \Controller_Addon {
         'js'     => 'js',
         'css'    => 'css',
     );
+    public $with_pages = true;
 
 
     public $configs = array();
-    public $addon_obj;
     public $view_class;
     private $translations = false;
     function init() {
         parent::init();
         $this->setConfigs();
-        $this->addLocations();
         $this->addTranslator();
         $this->api->addHook('localizeString',array($this,'_'));
     }
-    /* implement this function in your class if you need this */
-    protected function addLocations() {}
     function _($trash,$string) {
         // do not translate if only spases
         if (trim($string) == '') return $string;
