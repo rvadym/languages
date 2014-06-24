@@ -2,7 +2,7 @@
     "require": {
         "atk4\/atk4":"4.3.*@dev"
     },
-    "name": "vyze/languages",
+    "name": "rvadym/languages",
     "type": "library",
     "version": "4.3",
     "keywords": ["language switcher","atk4"],
