@@ -84,7 +84,7 @@ class Initiator extends \Controller_Addon {
 
     public function getOption($name='',$object=null){
 
-        //default values
+        //default values 
         if(!$object){
             $object=$this->addon_obj;
         }
