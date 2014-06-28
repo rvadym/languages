@@ -18,10 +18,12 @@ class Initiator extends \Controller_Addon {
         'page'      => 'page',
         'template'  => 'templates',
     );
+
     public $addon_public_locations  = array(
         'js'     => 'js',
         'css'    => 'css',
     );
+
     public $with_pages = true;
 
 
@@ -74,9 +76,25 @@ class Initiator extends \Controller_Addon {
         }
     }
     public function getAddonName() {
-        return $this->addon_obj->get('name');
+        return $this->getOption('name');
     }
     public function getTranslator() {
         return $this->translations;
     }
+
+    public function getOption($name='',$object=null){
+
+        //default values
+        if(!$object){
+            $object=$this->addon_obj;
+        }
+
+        //search object option $name
+        if(array_key_exists($name,get_object_vars($object))){
+            return $object->$name;
+        }else{
+            exit('object option "'.$name.'" is not found');
+        }
+    }
+
 }
