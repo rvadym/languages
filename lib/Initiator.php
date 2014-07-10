@@ -45,13 +45,13 @@ class Initiator extends \Controller_Addon {
         $default_config = array(
             'switcher_type'=>'session',
             'languages'=>array('en'),
+            'model' => 'Translation',
         );
         $configs = $this->api->getConfig($this->getAddonName(),$default_config);
         $configs['initiator'] = $this;
-        if($this->view_class){
-            $configs['view_class'] = $this->view_class;
-        }
-
+//        if($this->view_class){                                   //DEBUG<<< COMMENTED
+//            $configs['view_class'] = $this->view_class;           //DEBUG<<< COMMENTED
+//        }                                                         //DEBUG<<< COMMENTED
         // TODO check all configs
 
         $this->configs = $configs;
@@ -71,7 +71,8 @@ class Initiator extends \Controller_Addon {
             $class_with_namespace = __NAMESPACE__ . DIRECTORY_SEPARATOR . $class;
             $this->translations = $this->add($class_with_namespace, $this->configs);
             if ($this->configs['store_type'] == 'db') {
-                $this->translations->setModel($this->configs['model']);
+                $m= ($this->configs['model'])?$this->configs['model']:'Model_Translation';
+                $this->translations->setModel($m);
             }
         }
     }
@@ -82,9 +83,10 @@ class Initiator extends \Controller_Addon {
         return $this->translations;
     }
 
+    //get() method for stdClass object from json
     public function getOption($name='',$object=null){
 
-        //default values 
+        //default values
         if(!$object){
             $object=$this->addon_obj;
         }

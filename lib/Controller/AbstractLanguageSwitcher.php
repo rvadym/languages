@@ -28,7 +28,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         } else {
             $this->translation_dir_path = $this->api->pathfinder->base_location->getPath().'/translations';
         }
-        $this->api->getConfig($this->initiator->getAddonName().'/switcher_tag','lang_switch');
+        $this->api->getConfig($this->initiator->getAddonName().'/switcher_tag',$this->switcher_tag);
     }
 
     ////////  translation  ////////
@@ -59,9 +59,10 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
     public function translate() {
         if($this->model) {
             $t_trans = $this->model->getRows();
+            $lang = $this->getLanguage();
             foreach ($t_trans as $t) {
-                if (!array_key_exists($this->l,$t)) continue;
-                $this->translations[$t['value']] = $t[$this->l];
+                if (!array_key_exists($lang,$t)) continue;
+                $this->translations[$t['value']] = $t[$lang];
             }
         } else {
             $this->createDirIfNotExist($this->translation_dir_path);
@@ -81,6 +82,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
         }
     }
     public function addLangSwitcher($view,$class=null) {
+
         $view_class = ($class)?$class:$this->view_class;
         $view->add($view_class,
             array('controller'=>$this),
@@ -95,6 +97,25 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
             mkdir($path);
             chmod($path,0777);
         }
+    }
+
+    public function setModel($model){
+        $m = $this->add($model);
+
+        //If model is empty, load data from files
+        if(!$m->count()->getOne()){
+            $m->fillFromFile();
+        }
+
+        parent::setModel($m);
+    }
+
+    /**
+     * Remove all data from model
+     */
+    public function ClearModel(){
+        $m = $this->getModel();
+        $m->dsql()->delete();
     }
 
 }
