@@ -54,7 +54,7 @@ You can store translations in database or in yml files (use config 'store_type')
 
 To store in database you need to follow instructions above:
 
--	use the sql model doc/languages.sql to create necessary tables
+-	use the sql model doc/languages.sql to create required tables
 -	add every item from array languages as columns of databese table 'translation'.  //Column 'en' is already set to table in script.
 
 It would translate value of column 'value' to the value of chosen language column (like 'en').
