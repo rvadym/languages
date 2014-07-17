@@ -14,7 +14,7 @@ class Model_Language extends \SQL_Model{
         //fields
         $this->addField('name');
         $this->addField('ui_name');
-        $this->addField('is_active')->type('bool');
+        $this->addField('is_active')->type('boolean');
     }
 
     /**
