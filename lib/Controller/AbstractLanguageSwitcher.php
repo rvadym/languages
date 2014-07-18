@@ -198,7 +198,7 @@ abstract class Controller_AbstractLanguageSwitcher extends \AbstractController {
 
         $m = $this->getModel();
         $data = $m->getRows();
-        if(!$data)  return;
+        if(!$data)  return false;
 
         $active_languages = $this->getActiveLanguages();
 

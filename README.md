@@ -60,3 +60,11 @@ To store in database you need to follow instructions above:
 It would translate value of column 'value' to the value of chosen language column (like 'en').
 
 To customize model, extend it from Model_Translation.
+
+Create page and extend it from rvadym\languages\page_langadmin to have a possibility to change translations, stored in database.
+Every tab on this page would be translated if it's value is added to translations.
+
+//TODO:
+- make possible to select languages to be synchronized in langadmin page
+- make possible to use atk4-addons/dynamic_model to set language fields automatically during installation.
+- make UI view to use ui_name
