@@ -18,10 +18,12 @@ class Initiator extends \Controller_Addon {
         'page'      => 'page',
         'template'  => 'templates',
     );
+
     public $addon_public_locations  = array(
         'js'     => 'js',
         'css'    => 'css',
     );
+
     public $with_pages = true;
 
 
@@ -46,10 +48,6 @@ class Initiator extends \Controller_Addon {
         );
         $configs = $this->api->getConfig($this->getAddonName(),$default_config);
         $configs['initiator'] = $this;
-        if($this->view_class){
-            $configs['view_class'] = $this->view_class;
-        }
-
         // TODO check all configs
 
         $this->configs = $configs;
@@ -69,14 +67,39 @@ class Initiator extends \Controller_Addon {
             $class_with_namespace = __NAMESPACE__ . DIRECTORY_SEPARATOR . $class;
             $this->translations = $this->add($class_with_namespace, $this->configs);
             if ($this->configs['store_type'] == 'db') {
-                $this->translations->setModel($this->configs['model']);
+
+                //Fill table 'language' from $this->configs['languages'] if it has no data.
+                $m_languages = $this->add('rvadym/languages/Model_Language');
+                if(!$m_languages->count()->getOne()){
+                    $m_languages->setDefaultData($this->configs['languages']);
+                }
+
+                $m= ($this->configs['model'])?$this->configs['model']:'rvadym/languages/Model_Translation';
+                $this->translations->setModel($m);
             }
         }
     }
     public function getAddonName() {
-        return $this->addon_obj->get('name');
+        return $this->getOption('name');
     }
     public function getTranslator() {
         return $this->translations;
     }
+
+    //get() method for stdClass object from json
+    public function getOption($name='',$object=null){
+
+        //default values
+        if(!$object){
+            $object=$this->addon_obj;
+        }
+
+        //search object option $name
+        if(array_key_exists($name,get_object_vars($object))){
+            return $object->$name;
+        }else{
+            exit('object option "'.$name.'" is not found');
+        }
+    }
+
 }

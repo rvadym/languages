@@ -1,53 +1,70 @@
-language switcher plugin for atk4 with yaml file support
+Language switcher add-on for atk4 with yaml file support.
+Add-on requires ATK version 4.3 or higher.
 
-usage:
+-------------
+Installation:
+-------------
+1.  Add object to sandbox_addons.json and set such properties:
+    -   "name":                 "rvadym/languages",
+    -   "addon_full_path":      "../vendor/rvadym/languages",
+    -   "addon_symlink_name":   "rvadym_languages",
+    -   "addon_public_symlink": "public/rvadym_languages"
 
-      $this->add('rvadym/languages/Controller_LanguageSwitcher',array(
-          'languages'=>array('ua','ru','en'),
-          'default_language'=>'en',
-       ));
+2.  Configure add-on in config.php:
 
-you can store translations in database or in yml files
-if DB
+All config settings must be placed into array :
 
-    $this->languages->setModel('Translations');
+$config['rvadym']['languages']  = array(). If there is no option, it would set to default values.
 
-and translation code is
+You may use such options:
 
-    $this->api->_('Home');
++   'languages'            => array('en','ru','ua'),      // list of used languages. Default: array('en')
++   'default_language'     => 'en',                       // Default: the first element of array 'languages'
++   'switcher_type'        => 'session',                  // 'session' or 'url'. Default: 'session'
++   'translation_dir_path' => 'translations',             // Directory of translation files. Relative to api dir path
++   'store_type'           => 'file',                     // file | db. Default: 'file'
++   'model'    `           => 'Translation',              // if 'store_type' == db provide name of Model. Default: 'Translation'
++   'view_class'           => 'View_MyCustomView',        // custom view class for switcher.
++   'switcher_tag'         => 'language_switcher_panel',  // name of spot for template. Default: lang_switch
++   'to_same_page'         => true,                       // To set redirect to homepage after language changing set it to false.
++   'var_name'             => 'lang',                     // You can change name of $_GET variable. Same name will be used for session storage.
++   'debug'                => true,                       // Used to show untranslated words
 
-If you want all system messages of Agile toolkit to be translated just add this code to your api class.
+-------------
+Usage:
+-------------
 
-    // translations
-    public $languages = false;
-    function _($string) {
-        if (!$this->languages) {
-            $this->add('rvadym/languages/Controller_LanguageSwitcher',array(
-                'languages'=>array('en','ru','lv','ua'),
-                'default_language'=>'en',
-            ));
-            //$this->languages->setModel('Translations');
-        }
-        return $this->languages->__($string);
-    }
+Place the line into frontend class init to add switcher :
+
+		$this->languages->addLangSwitcher($this);
 
 You can also change look of switcher.
+
 Extend your own switcher View from rvadym\languages\View_LanguageSwitcher and change template and method showSwitcher() .
+To use custom view for switcher you must set option in config.php or set second parameter of addLangSwitcher function (more priority).
 
-To set redirect to homepage after language changing set parameter to_same_page to false.
+Value of View instances (View, H1, P etc.) would be translated automatically after set.
 
-	$this->add('rvadym/languages/Controller_LanguageSwitcher',array(
-		'to_same_page'=>false,   //   <------
-		'languages'=>array('en','ru','lv','ua'),
-		'default_language'=>'en',
-	));
+To translate value of wrapped elements like Text use "api->_('value')" or system message like confirmation:
 
-You can change name of $_GET variable. Same name will be used for session storage.
+		$this->add('Text')->set($this->api->_('some value'));  //for text value
+		$button->js('click')->univ()->confirm($this->api->_('Some process will be started. Continue?')));  //for confirmation
 
-	$this->add('rvadym/languages/Controller_LanguageSwitcher',array(
-		'var_name'=>'change_language_to',   //   <------
-		'languages'=>array('en','ru','lv','ua'),
-		'default_language'=>'en',
-	));
+You can store translations in database or in yml files (use config 'store_type').
 
-Add $config['rvadym']['languages']['debug']=true; to see all not translated words.
+To store in database you need to follow instructions above:
+
+-	use the sql model doc/languages.sql to create required tables
+-	add every item from array languages as columns of databese table 'translation'.  //Column 'en' is already set to table in script.
+
+It would translate value of column 'value' to the value of chosen language column (like 'en').
+
+To customize model, extend it from Model_Translation.
+
+Create page and extend it from rvadym\languages\page_langadmin to have a possibility to change translations, stored in database.
+Every tab on this page would be translated if it's value is added to translations.
+
+//TODO:
+- make possible to select languages to be synchronized in langadmin page
+- make possible to use atk4-addons/dynamic_model to set language fields automatically during installation.
+- make UI view to use ui_name

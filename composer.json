@@ -1,16 +1,19 @@
 {
+    "require": {
+        "atk4\/atk4":"4.3.*@dev"
+    },
     "name": "rvadym/languages",
     "type": "library",
     "version": "4.3",
     "keywords": ["language switcher","atk4"],
-    "homepage": "https://github.com/rvadym/languages",
+    "homepage": "https://github.com/vyze/languages",
     "source": {
-        "url": "git@github.com:rvadym/languages.git",
+        "url": "git@github.com:vyze/languages.git",
         "type": "git",
         "reference": "origin/master"
     },
     "autoload": {
         "files": ["/spyc/spyc.php"],
-         "psr-0": {"rvadym\\languages": "lib/"}
+         "psr-0": {"vyze\\languages": "lib/"}
     }
 }
